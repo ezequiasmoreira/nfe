@@ -144,10 +144,10 @@ class NfeService extends Model
         $stdProd->qTrib ="10";
         $stdProd->vUnTrib = $this->format(6.99);
         $stdProd->vProd =  $this->format($stdProd->qTrib * $stdProd->vUnTrib);
-        $stdProd->vFrete = "0.00";
-        $stdProd->vSeg = "0.00";
-        $stdProd->vDesc = "0.00";
-        $stdProd->vOutro = "0.00";
+        $stdProd->vFrete = "";
+        $stdProd->vSeg = "";
+        //$stdProd->vDesc = "";
+        $stdProd->vOutro = "";
         $stdProd->indTot ="1";//se estiver 1 o produto vai compor o valor total da nota
         //$stdProd->xPed =""; //numero do pedido no sistema
         //$stdProd->nItemPed ="";
