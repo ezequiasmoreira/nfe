@@ -47,7 +47,8 @@ class NfeController extends Controller
             "CSC" => "GPB0JBWLUR6HWFTVEAS6RJ69GPCROFPBBB8G",
             "CSCid" => "000002"
         ]);
-       
+        
+        header('Content-type: text/xml; charset-UTF-8');
        return $nfe_service->gerarNfe();
     }
 

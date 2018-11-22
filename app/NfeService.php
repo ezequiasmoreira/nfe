@@ -3,6 +3,7 @@
 namespace App;
 use NFePHP\NFe\Make;
 use \stdClass;
+use \number_format;
 use Illuminate\Database\Eloquent\Model;
 use app\rand;
 
@@ -101,7 +102,7 @@ class NfeService extends Model
         $stdDest->ISUF ="";
         $stdDest->IM ="";
         $stdDest->email ="ezequiasmoreira@hotmail.com";
-        $stdDest->CNPJ ="235194460000126"; //indicar apenas um CNPJ ou CPF ou idEstrangeiro
+        $stdDest->CNPJ ="01358376000135"; //indicar apenas um CNPJ ou CPF ou idEstrangeiro
         //$stdDest->CPF;
         //$stdDest->idEstrangeiro;
 
@@ -137,16 +138,16 @@ class NfeService extends Model
         $stdProd->CFOP ="5102";
         $stdProd->uCom ="UN";
         $stdProd->qCom ="10";//QTD DO PRODUTO
-        $stdProd->vUnCom ="6.99";        
+        $stdProd->vUnCom = $this->format(6.99);      
         $stdProd->cEANTrib ="7897534826649";//codigo de barra da unidade
         $stdProd->uTrib ="UN";
         $stdProd->qTrib ="10";
-        $stdProd->vUnTrib ="6.99";
-        $stdProd->vProd =  $stdProd->qTrib * $stdProd->vUnTrib;
+        $stdProd->vUnTrib = $this->format(6.99);
+        $stdProd->vProd =  $this->format($stdProd->qTrib * $stdProd->vUnTrib);
         $stdProd->vFrete = "0.00";
-        $stdProd->vSeg ="0.00";
-        $stdProd->vDesc ="0.00";
-        $stdProd->vOutro ="0.00";
+        $stdProd->vSeg = "0.00";
+        $stdProd->vDesc = "0.00";
+        $stdProd->vOutro = "0.00";
         $stdProd->indTot ="1";//se estiver 1 o produto vai compor o valor total da nota
         //$stdProd->xPed =""; //numero do pedido no sistema
         //$stdProd->nItemPed ="";
@@ -176,9 +177,9 @@ class NfeService extends Model
         $stdICMS->orig = 0;
         $stdICMS->CST = "00";
         $stdICMS->modBC = "0";
-        $stdICMS->vBC = $stdProd->vProd;
+        $stdICMS->vBC = $this->format($stdProd->vProd);
         $stdICMS->pICMS = 18.00;
-        $stdICMS->vICMS = $stdICMS->vBC * ($stdICMS->pICMS / 100);
+        $stdICMS->vICMS = $this->format($stdICMS->vBC * ($stdICMS->pICMS / 100));
         /*$stdICMS->pFCP;
         $stdICMS->vFCP;
         $stdICMS->vBCFCP;
@@ -214,9 +215,9 @@ class NfeService extends Model
         $stdPIS = new stdClass();
         $stdPIS->item = 1; //item da NFe
         $stdPIS->CST = '50';
-        $stdPIS->vBC = $stdProd->vProd;
+        $stdPIS->vBC = $this->format($stdProd->vProd);
         $stdPIS->pPIS = 1.65;
-        $stdPIS->vPIS = $stdPIS->vBC * ($stdPIS->pPIS / 100);
+        $stdPIS->vPIS = $this->format($stdPIS->vBC * ($stdPIS->pPIS / 100));
         //$stdPIS->qBCProd = null;
         //$stdPIS->vAliqProd = null;
 
@@ -227,9 +228,9 @@ class NfeService extends Model
         $stdCOFINS = new stdClass();
         $stdCOFINS->item = 1; //item da NFe
         $stdCOFINS->CST = '50';
-        $stdCOFINS->vBC = $stdProd->vProd;
+        $stdCOFINS->vBC = $this->format($stdProd->vProd);
         $stdCOFINS->pCOFINS = 0.65;
-        $stdCOFINS->vCOFINS = $stdCOFINS->vBC * ($stdCOFINS->pCOFINS / 100);
+        $stdCOFINS->vCOFINS = $this->format($stdCOFINS->vBC * ($stdCOFINS->pCOFINS / 100));
         //$std->qBCProd = null;
         //$std->vAliqProd = null;
 
@@ -292,7 +293,7 @@ class NfeService extends Model
         
         $stdDetPag = new stdClass();
         $stdDetPag->tPag = '14';
-        $stdDetPag->vPag = $stdProd->vProd; //Obs: deve ser informado o valor pago pelo cliente
+        $stdDetPag->vPag = $this->format($stdProd->vProd); //Obs: deve ser informado o valor pago pelo cliente
         //$stdDetPag->CNPJ = '12345678901234';
         //$stdDetPag->tBand = '01';
         //$stdDetPag->cAut = '3333333';
@@ -310,10 +311,12 @@ class NfeService extends Model
         
         /**MONTA A NOTA**/
         if($nfe->montaNFe()){
-           return $nfe->getChave(); 
+           return $nfe->getXML(); 
         }else{
           throw new Exception("Erro ao gerra a nfe");  
-        }
-
+        } 
+    }
+    public function format($nunber, $dec=2){
+        return number_format((float)$nunber,$dec,".","");
     }
 }
