@@ -2,6 +2,8 @@
 
 namespace App;
 use NFePHP\NFe\Make;
+use NFePHP\NFe\Tools;
+use NFePHP\Common\Certificate;
 use \stdClass;
 use \number_format;
 use Illuminate\Database\Eloquent\Model;
@@ -10,21 +12,13 @@ use app\rand;
 class NfeService extends Model
 {
     private $config;
+    private $tools;
+    
     public function __construct($config){
-        $config = [
-            "atualizacao" => "2015-10-02 06:01:21",
-            "tpAmb" => 2,
-            "razaosocial" => "Fake Materiais de construção Ltda",
-            "siglaUF" => "SP",
-            "cnpj" => "00716345000119",
-            "schemes" => "PL_008i2",
-            "versao" => "3.10",
-            "tokenIBPT" => "AAAAAAA",
-            "CSC" => "GPB0JBWLUR6HWFTVEAS6RJ69GPCROFPBBB8G",
-            "CSCid" => "000002"
-        ];
-
-        $json = json_encode($config);
+        $this->config = $config;
+        //$certificadoDigital = file_get_contents('certificado.pfx');
+        //$this->tools = new Tools(json_encode($config), NFePHP\Common\Certificate::readPfx($certificadoDigital, '12345'));
+        
     }
     function gerarNfe(){
         //cria uma nota vazia
