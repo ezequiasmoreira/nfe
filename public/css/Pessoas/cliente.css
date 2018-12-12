@@ -1,6 +1,8 @@
 *{font-family: Arial; font-size: 1em;}
 .linha-cliente,.tabela-cliente,.conteudo{width: 100%; float: left;}
+.linha-cliente{margin-top: 5px;}
 .col-dir-title,.col-esq-title{width:5%; float:left; padding: 0 1%;}
 .col-dir-value,.col-esq-value{width:10%; float:left; size: 100px; }
+.cli-numero{width: 40%;}
 
 
