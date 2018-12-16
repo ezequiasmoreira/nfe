@@ -17,8 +17,14 @@ class Cliente extends Model
         'cnpj',
         'cpf',
         'idEstrangeiro',
+        //endereço
+        'logradouro',
+        'numero',
+        'complemento',
+        'fone',
+        'cep',
         //fk
-        'endereco_id',
+        'cidade_id',
         'empresa_id',
         'usuario_id'
     ];

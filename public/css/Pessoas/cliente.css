@@ -1,5 +1,6 @@
 *{font-family: Arial; font-size: 1em; padding: 0; margin: 0}
-.linha-cliente,.tabela-cliente,.conteudo{width: 100%;}
+.linha,.tabela,.conteudo.botao{width: 100%;}
+.botao{text-align: right;}
 .col-dir-title,.col-esq-title{width:5%; float:left; padding: 0 1%;}
 .col-dir-value,.col-esq-value{width:10%; float:left; size: 100px; }
 .cli-numero{width: 40%;}
