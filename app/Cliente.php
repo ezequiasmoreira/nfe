@@ -21,8 +21,11 @@ class Cliente extends Model
         'logradouro',
         'numero',
         'complemento',
+        'bairro',
         'fone',
         'cep',
+        'tipo_pessoa',//1 fisica - 2 juridica
+        'origem',//1 NACIONAL -  2 ESTRANGEIRO
         //fk
         'cidade_id',
         'empresa_id',

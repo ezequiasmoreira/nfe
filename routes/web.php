@@ -12,5 +12,6 @@ Route::group(["prefix" => "cliente", "namespace"=>"pessoas"], function () {
     Route::post("/salvar", "ClienteController@salvar");
     Route::post("/atualizar", "ClienteController@atualizar");
     Route::post("/retorna-cidade", "ClienteController@retornaCidade");
+    Route::post("/retorna-estado", "ClienteController@retornaEstado");
     Route::post("/retorna-clientes", "ClienteController@retornaCientes");
 });

@@ -34,7 +34,23 @@
                             <option value="9">NÃO CONTRIBUINTE </option>
                         </select>
                     </td>                
-                </tr>            
+                </tr>  
+                <tr>
+                    <td class="col-esq-title"><label for="tipo">TIPO:</label></td>
+                    <td class="col-esq-value">
+                        <select class="form-control input-sm cli-numero" id="tipo" name="tipo" required>
+                            <option value="1">FÍSICA</option>
+                            <option value="2">JURÍDICA</option>
+                        </select>
+                    </td> 
+                    <td class="col-esq-title"><label for="origem">ORIGEM:</label></td>
+                    <td class="col-esq-value">
+                        <select class="form-control input-sm cli-numero" id="origem" name="origem" required>
+                            <option value="1">NACIONAL</option>
+                            <option value="1">ESTRANGEIRO</option>
+                        </select>
+                    </td> 
+                </tr>
                 <tr class="linha">
                     <td class="col-dir-title"><label for="nome" title="Nome do cliente">NOME:</label></td>
                     <td class="col-dir-value "><input type="text" class="form-control input-sm "  id="nome" name="nome"  required></td>
@@ -88,35 +104,126 @@
                 <td class="col-esq-title"><label for="pais">PAIS:</label></td>
                 <td class="col-esq-value">
                     <select class="form-control input-sm cli-numero" id="pais" name="pais" required>
-                        <option value="1058">BRASIL</option>
+                        <?php if(@$paises){
+                            foreach ($paises as $pais){?>
+                            <option value="<?php echo $pais->id ?>"><?php echo $pais->sigla." - ".$pais->nome ?></option>
+                        <?php }}?>
                     </select>
                 </td> 
                 <td class="col-esq-title"><label for="estado">ESTADO:</label></td>
                 <td class="col-esq-value">
                     <select class="form-control input-sm cli-numero" id="estado" name="estado" required>
-                        <option value="1">SANTA CATARINA</option>
+                        <option value="0">SELECIONE</option>
+                        <?php if(@$estados){
+                            foreach ($estados as $estado){?>
+                            <option class="removeEstados" value="<?php echo $estado->id ?>"><?php echo $estado->sigla." - ".$estado->nome ?></option>
+                        <?php }}?>
                     </select>
                 </td> 
             </tr>
             <tr>
-                <td class="col-esq-title"><label for="municipio">CIDADE:</label></td>
+                <td class="col-esq-title"><label for="cidade">CIDADE:</label></td>
                 <td class="col-esq-value">
-                    <select class="form-control input-sm cli-numero" id="municipio" name="municipio" required>
-                        <option value="1">CRICIÚMA</option>
+                    <select class="form-control input-sm cli-numero" id="cidade" name="municipio" required>
+                        
                     </select>
                 </td> 
                 <td class="col-esq-title"><label for="cep">CEP:</label></td>
                 <td class="col-dir-value "><input type="text" class="form-control input-sm cli-numero "  id="cep"name="cep"></td>
             </tr>
         </tbody>
-        </table>
-      
-    </div>     
-  
+        </table>      
+    </div>
         <div class="alert alert-success" style="display:none"></div>
     </div>
 </div>
 </div>
-
 @endsection
+<script>
+window.onload=function (){
+    retornaCidades();
+    retornaEstados();
+}
+function retornaCidades(){
+   
+    $(document).ready(function(){
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+       $("#estado").on('change', function(){
+            
+            var estado  = $('#estado').val();
+            var token   = $("input[type=hidden][name=_token]").val();
+            
+            $.ajax({
+                type:"post",
+                url:"{!! URL::to('cliente/retorna-cidade') !!}",
+                dataType: 'JSON',
+                data: {
+                    "estado_id": estado, 
+                    '_token': token
+                },
+                success:function(data){  
+                    $(".removeCidades").each(function() {
+                        $(this).remove();
+                    });
+                    for (var i = 0; i < data.length; i++) { 
+                        var id      = data[i].id;
+                        var nome    = data[i].nome;                                          
+                        $('#cidade').append("<option class='removeCidades' value="+id+">"+nome+"</option>");                   
+                    }
+                },
+                error:function(){                    
+                        alert("Ocorreu algum problema entre em contato como suporte");                    
+                },
+            });
+       });
+    });  
+}
+function retornaEstados(){
+   
+    $(document).ready(function(){
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+       $("#pais").on('change', function(){
+            
+            var pais  = $('#pais').val();
+            var token   = $("input[type=hidden][name=_token]").val();
+            
+            $.ajax({
+                type:"post",
+                url:"{!! URL::to('cliente/retorna-estado') !!}",
+                dataType: 'JSON',
+                data: {
+                    "pais_id": pais, 
+                    '_token': token
+                },
+                success:function(data){  
+                    $(".removeEstados").each(function() {
+                        $(this).remove();
+                    });
+                    $(".removeCidades").each(function() {
+                        $(this).remove();
+                    });
+                    for (var i = 0; i < data.length; i++) { 
+                        var id      = data[i].id;
+                        var nome    = data[i].nome;                                          
+                        $('#estado').append("<option class='removeEstados' value="+id+">"+nome+"</option>");                   
+                    }
+                },
+                error:function(){                    
+                        alert("Ocorreu algum problema entre em contato como suporte");                    
+                },
+            });
+       });
+    });   
+    
+
+}
+</script>
 
