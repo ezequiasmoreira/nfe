@@ -17,14 +17,14 @@
                 {{ csrf_field()}}
                 <tr class="linha">
                     <td class="botao" colspan="4">
-                        <a href="" id="salvar" class="btn btn-secondary btn-success btn-sm">SALVAR</a>
+                        <button id="salvar" class="btn btn-secondary btn-success btn-sm">SALVAR</button>
                         <a href="" id="excluir" class="btn btn-secondary btn-danger btn-sm">EXCLUIR</a>
                         <a href="" id="pesquisar "class="btn btn-secondary btn-info btn-sm">PESQUISAR</a>
                     </td>
                 </tr>
                 <tr class="linha">
                     <td class="col-dir-title"><label for="id" title="Código do cliente">CÓDIGO:</label></td>
-                    <td class="col-dir-value "><input type="text" class="form-control input-sm cli-numero"  id="id"  name="id" readonly="readonly" required></td>
+                    <td class="col-dir-value "><input type="text" class="form-control input-sm cli-numero"  id="id"  name="id" readonly="readonly"></td>
                     <td class="col-esq-title"><label for="contribuinte_icms">INDICADOR:</label></td>
                     <td class="col-esq-value">
                         <select class="form-control input-sm cli-numero" id="contribuinte_icms" name="contribuinte_icms" required="">
@@ -143,6 +143,9 @@
 window.onload=function (){
     retornaCidades();
     retornaEstados();
+    $('#salvar').click(function(){
+        salvar();
+    });
 }
 function retornaCidades(){
    
@@ -212,8 +215,9 @@ function retornaEstados(){
                     });
                     for (var i = 0; i < data.length; i++) { 
                         var id      = data[i].id;
+                        var sigla    = data[i].sigla; 
                         var nome    = data[i].nome;                                          
-                        $('#estado').append("<option class='removeEstados' value="+id+">"+nome+"</option>");                   
+                        $('#estado').append("<option class='removeEstados' value="+id+">"+sigla+ ' - ' +nome+"</option>");                   
                     }
                 },
                 error:function(){                    
@@ -221,9 +225,44 @@ function retornaEstados(){
                 },
             });
        });
-    });   
-    
-
+    });
 }
+function validarIndicador(indicador){
+    switch (indicador) { 
+        //se for contribuinte para do icms deve informar a IE
+        case '0':
+                alert("Deve ser informado se o cliente é contribuite do icms");
+                $('#contribuinte_icms').focus();
+                return false;
+        break;
+        case '1': 
+            if ($("#inscricao_estadual").val() === ""){
+                alert("Para contribuinte do icms deve ser informado a inscrição estadual");
+                $("#inscricao_estadual").focus();
+                return false;
+            }
+        break;
+        case '2': 
+            if ($("#inscricao_estadual").val() !== ""){
+                alert("Para contribuinte isento do icms não deve ser informado a inscrição estadual");                
+                $("#inscricao_estadual").focus();
+                return false;
+            }
+        break;
+        case '9': 
+            if ($("#inscricao_estadual").val() !== ""){
+                alert("Para não contribuinte do icms não deve ser informado a inscrição estadual");                
+                $("#inscricao_estadual").focus();
+                return false;
+            }
+        break;
+    }
+}
+function salvar(){    
+    var indicador = $('#contribuinte_icms').val();
+    validarIndicador(indicador);
+    
+}
+
 </script>
 
