@@ -39,6 +39,7 @@
                     <td class="col-esq-title"><label for="tipo">TIPO:</label></td>
                     <td class="col-esq-value">
                         <select class="form-control input-sm cli-numero" id="tipo" name="tipo" required>
+                            <option value="0">SELECIONE</option>
                             <option value="1">FÍSICA</option>
                             <option value="2">JURÍDICA</option>
                         </select>
@@ -47,7 +48,7 @@
                     <td class="col-esq-value">
                         <select class="form-control input-sm cli-numero" id="origem" name="origem" required>
                             <option value="1">NACIONAL</option>
-                            <option value="1">ESTRANGEIRO</option>
+                            <option value="2">ESTRANGEIRO</option>
                         </select>
                     </td> 
                 </tr>
@@ -71,7 +72,7 @@
                 </tr>            
                 <tr class="linha">
                     <td class="col-dir-title"><label for="idEstrangeiro" title="Em caso de exportação deve ser informado algum documento legal para identificar o cliente estrangeiro">PASSAPORTE:</label></td>
-                    <td class="col-dir-value "><input type="text" class="form-control input-sm cli-numero"  id="idEstrangeiro" name="idEstrangeiro"></td>                    
+                    <td class="col-dir-value "><input type="text" class="form-control input-sm cli-numero"  id="idEstrangeiro" name="idEstrangeiro" readonly></td>                    
                 </tr>
             </div>
             </tbody>
@@ -143,6 +144,12 @@
 window.onload=function (){
     retornaCidades();
     retornaEstados();
+    $("#tipo").on('change', function(){
+        validarTipo();
+    });
+    $("#origem").on('change', function(){
+        validarOrigem();
+    });    
     $('#salvar').click(function(){
         salvar();
     });
@@ -258,10 +265,33 @@ function validarIndicador(indicador){
         break;
     }
 }
+function validarTipo(){
+    var PESSOAuFISICA = '1';
+    var PESSOAuJURIDICA = '2';
+    var tipo = $('#tipo').val();    
+    if (tipo == PESSOAuFISICA){
+        $('#cpf').prop('readonly','true');
+        $('#cnpj').prop('readonly','');
+    }
+    if (tipo == PESSOAuJURIDICA){
+        $('#cpf').prop('readonly','');
+        $('#cnpj').prop('readonly','true');
+    }
+}
+function validarOrigem(){
+    var NACIONAL = '1';
+    var EXTRANGEIRO = '2';
+    var origem = $('#origem').val();
+    if (origem === NACIONAL){
+        $('#idEstrangeiro').prop('readonly','true');
+    }
+    if (origem === EXTRANGEIRO){
+        $('#idEstrangeiro').prop('readonly','');
+    }
+}
 function salvar(){    
     var indicador = $('#contribuinte_icms').val();
     validarIndicador(indicador);
-    
 }
 
 </script>
